@@ -77,7 +77,7 @@ git pull
 修改代码后：
 
 git add .
-git commit -m "修改内容说明"
+git commit -m "260701最终程序"
 git push
 
 例如：
