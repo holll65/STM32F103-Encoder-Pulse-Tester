@@ -1,95 +1,57 @@
-# 5.压力显示_TJC_X5
+# STM32F103-Encoder-Pulse-Tester
 
 ## 项目说明
 
-本工程模板用于：
+本工程用于 STM32F103 编码器脉冲采集测试，主要功能包括：
 
-- STM32F103RCT6
-- 485采集压力传感器
-- RS232连接陶晶驰 TJC X5 串口屏
-- 显示压力、状态
-- 触发数据记录和报警记录
+- STM32F103ZET6
+- 采集增量式编码器 A 相脉冲
+- 使用外部中断 EXTI 进行脉冲计数
+- ILI9341 LCD 实时显示累计脉冲数
+- 用于检测编码器是否存在丢脉冲
+- 支持后续扩展 A/B/Z 三相信号检测
+- 支持后续增加频率、转速、丢脉冲判断等功能
+
+当前测试主要针对编码器 A 相脉冲。
+
+编码器参数示例：
+
+- 分辨率：2500 PPR
+- 每转 A 相理论脉冲数：2500
+- 单圈测试时，可通过累计脉冲数判断是否存在明显丢脉冲
+
+---
 
 ## 文件结构
 
 ```text
-5.压力显示_TJC_X5/
+STM32F103-Encoder-Pulse-Tester/
+
 ├── .vscode/
 │   ├── c_cpp_properties.json
 │   ├── settings.json
 │   ├── tasks.json
 │   └── launch.json
+│
 ├── platformio.ini
 ├── Makefile
+│
 ├── CMSIS/
 ├── FWlib/
+│
 └── USER/
     ├── main.c
-    ├── config_RS232.c/h
-    ├── config_rs485.c/h
-    ├── config_TJC.c/h
-    ├── config_protocol.c/h
-    ├── config_delay.c/h
-    └── stm32f10x_it.c/h
-```
-
-## 硬件连接
-
-| STM32引脚 | 连接 |
-|---|---|
-| PA9 USART1_TX | RS485/RS232发送 |
-| PA10 USART1_RX | RS485/RS232接收 |
-| PA8 | RS485 DE/RE方向控制 |
-| PC10 UART4_TX | 可扩展给TJC独立串口 |
-| PC11 UART4_RX | 可扩展给TJC独立串口 |
-
-## 推荐方式
-
-### PlatformIO
-
-1. VSCode 安装 PlatformIO IDE 插件
-2. 打开本文件夹
-3. 等待识别 `platformio.ini`
-4. 点击底部编译/下载
-
-### Makefile
-
-需要 ARM GCC：
-
-```bash
-make
-make clean
-```
-
-## 注意
-
-- 当前模板保留了你给出的原例程结构。
-- `config_RS232.c` 是 USART1 PA9/PA10。
-- `config_rs485.c` 用于压力采集，内部已放 Modbus CRC 框架。
-- `config_TJC.c` 用于陶晶驰串口屏命令发送。
-- 实际项目需要根据压力传感器寄存器地址修改 `RS485_ReadPressure()`。
-git提交
-git add .
-git commit -m "项目完成260627"
-git push
-git将代码同步到本地
-git pull
-修改代码后：
-
-git add .
-git commit -m "260701最终程序"
-git push
-
-例如：
-
-git add .
-git commit -m "增加压力传感器通信功能"
-git push
-
-因为已经建立了跟踪关系，以后不需要再写：
-
-git push -u origin main
-
-直接：
-
-git push"# STM32F103-Encoder-Pulse-Tester"  
+    ├── config_encoder.c
+    ├── config_encoder.h
+    ├── config_delay.c
+    ├── config_delay.h
+    ├── stm32f10x_it.c
+    ├── stm32f10x_it.h
+    │
+    ├── lcd/
+    │   ├── bsp_ili9341_lcd.c
+    │   └── bsp_ili9341_lcd.h
+    │
+    └── font/
+        ├── fonts.c
+        └── fonts.h
